@@ -28,10 +28,24 @@ gallery.addEventListener('click', showOriginalImage);
 
 function showOriginalImage(event) {
   event.preventDefault();
+  if (event.target === event.currentTarget) {
+    return;
+  }
 
   const imageUrl = event.target.dataset.source;
 
   const instance = basicLightbox.create(`<img src=${imageUrl}>`);
 
   instance.show();
+
+  if (instance.visible()) {
+    window.addEventListener('keydown', closeModalEsc);
+  }
+
+  function closeModalEsc(event) {
+    if (event.code === 'Escape') {
+      instance.close();
+      window.removeEventListener('keydown', closeModalEsc);
+    }
+  }
 }
